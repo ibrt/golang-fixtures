@@ -1,10 +1,20 @@
 package fixturez
 
 import (
-	"encoding/json"
 	"testing"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/ibrt/golang-errors/errorz"
+)
+
+var (
+	spewCfg = &spew.ConfigState{
+		Indent:                  "    ",
+		DisableCapacities:       true,
+		DisableMethods:          true,
+		DisablePointerAddresses: true,
+		DisablePointerMethods:   true,
+	}
 )
 
 // RequireNoError is like require.NoError, but properly formats attached error stack traces.
@@ -47,8 +57,7 @@ func noError(t *testing.T, err error, require bool) {
 		return
 	}
 
-	buf, _ := json.MarshalIndent(errorz.ToSummary(err), "", "  ")
-	t.Log(string(buf))
+	t.Log(spewCfg.Sdump(errorz.ToSummary(err)))
 
 	if require {
 		t.FailNow()
