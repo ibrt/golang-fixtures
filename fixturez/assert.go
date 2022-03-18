@@ -1,46 +1,77 @@
 package fixturez
 
 import (
+	"reflect"
 	"testing"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/ibrt/golang-errors/errorz"
+	"github.com/sanity-io/litter"
 )
 
 var (
-	spewCfg = &spew.ConfigState{
-		Indent:                  "    ",
-		DisableCapacities:       true,
-		DisableMethods:          true,
-		DisablePointerAddresses: true,
-		DisablePointerMethods:   true,
+	litterOpts = litter.Options{
+		HideZeroValues: true,
+		FieldFilter: func(f reflect.StructField, v reflect.Value) bool {
+			k := f.Type.Kind()
+			if k == reflect.Ptr {
+				k = f.Type.Elem().Kind()
+			}
+			return k != reflect.Func
+		},
 	}
 )
 
-// RequireNoError is like require.NoError, but properly formats attached error stack traces.
+// RequireNoError is like require.NoError, with proper handling of github.com/ibrt/golang-errors errors.
 func RequireNoError(t *testing.T, err error) {
 	t.Helper()
 	noError(t, err, true)
 }
 
-// AssertNoError is like assert.NoError, but properly formats attached error stack traces.
+// AssertNoError is like assert.NoError, with proper handling of github.com/ibrt/golang-errors errors.
 func AssertNoError(t *testing.T, err error) {
 	t.Helper()
 	noError(t, err, false)
 }
 
-// RequireNotPanics is like require.NotPanics, but properly formats attached error stack traces.
+// RequireNotPanics is like require.NotPanics, with proper handling of github.com/ibrt/golang-errors errors.
 func RequireNotPanics(t *testing.T, f func()) {
 	t.Helper()
 	err := catch(f)
 	noError(t, errorz.MaybeWrap(err, errorz.Prefix("panic")), true)
 }
 
-// AssertNotPanics is like assert.NotPanics, but properly formats attached error stack traces.
+// AssertNotPanics is like assert.NotPanics, with proper handling of github.com/ibrt/golang-errors errors.
 func AssertNotPanics(t *testing.T, f func()) {
 	t.Helper()
 	err := catch(f)
 	noError(t, errorz.MaybeWrap(err, errorz.Prefix("panic")), false)
+}
+
+// AssertPanicsWith is like assert.PanicsWithError, with proper handling of github.com/ibrt/golang-errors errors.
+func AssertPanicsWith(t *testing.T, errStr string, f func()) {
+	t.Helper()
+	panicsWith(t, errStr, f, false)
+}
+
+// RequirePanicsWith is like require.PanicsWithError, with proper handling of github.com/ibrt/golang-errors errors.
+func RequirePanicsWith(t *testing.T, errStr string, f func()) {
+	t.Helper()
+	panicsWith(t, errStr, f, true)
+}
+
+func noError(t *testing.T, err error, require bool) {
+	t.Helper()
+	if err == nil {
+		return
+	}
+
+	t.Logf("%v\n%v", err.Error(), litterOpts.Sdump(errorz.ToSummary(err)))
+
+	if require {
+		t.FailNow()
+	} else {
+		t.Fail()
+	}
 }
 
 func catch(f func()) (err error) {
@@ -51,17 +82,17 @@ func catch(f func()) (err error) {
 	return nil
 }
 
-func noError(t *testing.T, err error, require bool) {
+func panicsWith(t *testing.T, errStr string, f func(), require bool) {
 	t.Helper()
-	if err == nil {
-		return
-	}
-
-	t.Log(spewCfg.Sdump(errorz.ToSummary(err)))
-
-	if require {
-		t.FailNow()
-	} else {
-		t.Fail()
+	if err := catch(f); err == nil {
+		t.Log("expected panic, not received")
+		if require {
+			t.FailNow()
+		} else {
+			t.Fail()
+		}
+	} else if err.Error() != errStr {
+		t.Logf("expected panic with \"%v\", received:", errStr)
+		noError(t, errorz.MaybeWrap(err, errorz.Prefix("panic")), require)
 	}
 }

@@ -11,7 +11,7 @@ import (
 
 func TestAssertNoError_Error(t *testing.T) {
 	tt := &testing.T{}
-	fixturez.AssertNoError(tt, errorz.Errorf("test error"))
+	fixturez.AssertNoError(tt, errorz.Errorf("test error", errorz.M("k", &tt)))
 	require.True(t, tt.Failed())
 }
 
@@ -42,5 +42,35 @@ func TestAssertNotPanics_NoError(t *testing.T) {
 func TestRequireNotPanics_NoError(t *testing.T) {
 	tt := &testing.T{}
 	fixturez.RequireNotPanics(tt, func() {})
+	require.False(t, tt.Failed())
+}
+
+func TestAssertPanicsWith_NoPanic(t *testing.T) {
+	tt := &testing.T{}
+	fixturez.AssertPanicsWith(tt, "test error", func() {})
+	require.True(t, tt.Failed())
+}
+
+func TestAssertPanicsWith_DifferentPanic(t *testing.T) {
+	tt := &testing.T{}
+	fixturez.AssertPanicsWith(tt, "test error", func() {
+		errorz.MustErrorf("other test error")
+	})
+	require.True(t, tt.Failed())
+}
+
+func TestAssertPanicsWith_Panic(t *testing.T) {
+	tt := &testing.T{}
+	fixturez.AssertPanicsWith(tt, "test error", func() {
+		errorz.MustErrorf("test error")
+	})
+	require.False(t, tt.Failed())
+}
+
+func TestRequirePanicsWith_Panic(t *testing.T) {
+	tt := &testing.T{}
+	fixturez.RequirePanicsWith(tt, "test error", func() {
+		errorz.MustErrorf("test error")
+	})
 	require.False(t, tt.Failed())
 }
