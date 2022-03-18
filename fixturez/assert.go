@@ -10,7 +10,8 @@ import (
 
 var (
 	litterOpts = litter.Options{
-		HideZeroValues: true,
+		HideZeroValues:    true,
+		HidePrivateFields: true,
 		FieldFilter: func(f reflect.StructField, v reflect.Value) bool {
 			k := f.Type.Kind()
 			if k == reflect.Ptr {
