@@ -125,5 +125,9 @@ func getSimplifiedErrorSummary(err error) *errorz.Summary {
 		summary.Metadata = nil
 	}
 
+	if len(summary.StackTrace) == 0 {
+		summary.StackTrace = nil
+	}
+
 	return summary
 }
