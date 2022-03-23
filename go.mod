@@ -3,7 +3,7 @@ module github.com/ibrt/golang-fixtures
 go 1.17
 
 require (
-	github.com/ibrt/golang-errors v1.0.0
+	github.com/ibrt/golang-errors v1.1.0
 	github.com/sanity-io/litter v1.5.4
 	github.com/stretchr/testify v1.7.0
 )
