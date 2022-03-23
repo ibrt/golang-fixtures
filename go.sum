@@ -1,10 +1,8 @@
 github.com/davecgh/go-spew v0.0.0-20161028175848-04cdfd42973b/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/ibrt/golang-errors v1.0.0 h1:3+ccXbAfLGL0PsMFxrtvlWr42lyncqVL7cSWltLYfpI=
-github.com/ibrt/golang-errors v1.0.0/go.mod h1:T4eQeBJ8CKAp52LT1dHwJ6qKnWKRgoTjDqDF7DM2U08=
-github.com/ibrt/golang-errors v1.1.0 h1:88RDWpqPBqqf3zhhJxcAaF/2E+W23SXohG9exckqBgc=
-github.com/ibrt/golang-errors v1.1.0/go.mod h1:T4eQeBJ8CKAp52LT1dHwJ6qKnWKRgoTjDqDF7DM2U08=
+github.com/ibrt/golang-errors v1.1.3 h1:VJfhj7ONFIGebx9c79yJPYqlQXUzSrkIBfROPNfPb7Y=
+github.com/ibrt/golang-errors v1.1.3/go.mod h1:T4eQeBJ8CKAp52LT1dHwJ6qKnWKRgoTjDqDF7DM2U08=
 github.com/pmezard/go-difflib v0.0.0-20151028094244-d8ed2627bdf0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
